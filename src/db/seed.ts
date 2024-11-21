@@ -29,7 +29,7 @@ import { redis } from '@/lib/redis';
       name: u,
       email:
         u === 'Michael'
-          ? 'hi.cuevantn@gmail.com'
+          ? 'honige3272@exoular.com'
           : u.toLowerCase() + '@moversmarket.co.uk',
     }));
 
