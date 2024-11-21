@@ -18,7 +18,6 @@ export async function addMember(formData: FormData): Promise<
 > {
   try {
     const email = formData.get('email');
-    console.log(email);
 
     const parsedEmail = z.string().email().safeParse(email);
 

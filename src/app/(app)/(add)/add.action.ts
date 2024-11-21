@@ -19,7 +19,6 @@ export async function add(formData: FormData): Promise<
   | { success: false; error: string }
 > {
   try {
-    console.log(formData.get('weight'));
     const rawWeight = formData.get('weight');
     const parsedWeight = z.coerce
       .number()

@@ -14,7 +14,6 @@ export async function updateName(formData: FormData): Promise<
 > {
   try {
     const name = formData.get('name');
-    console.log(name);
 
     const parsedName = z.string().min(2).safeParse(name);
 

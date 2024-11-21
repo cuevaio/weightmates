@@ -22,8 +22,6 @@ export async function validate(formData: FormData): Promise<
   try {
     const email = formData.get('email');
     const otp = formData.get('otp');
-    console.log(email);
-    console.log(otp);
 
     const parsedEmail = z.string().email().safeParse(email);
     const parsedOtp = z.string().min(6).safeParse(otp);

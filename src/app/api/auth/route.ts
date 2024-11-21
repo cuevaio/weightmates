@@ -17,7 +17,7 @@ export const GET = async () => {
     });
 
     if (!user) {
-      throw new Error('Internal server error', {
+      throw new Error('Register first', {
         cause: 500,
       }); // user has to be created before going to (app)
     }
