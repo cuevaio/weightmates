@@ -54,6 +54,10 @@ export async function acceptInvite(formData: FormData): Promise<
       );
 
     revalidatePath('/invites');
+    revalidatePath('/teams/' + parsedTeamId.data);
+    revalidatePath('/teams/' + parsedTeamId.data + '/members');
+    revalidatePath('/teams/' + parsedTeamId.data + '/invites');
+
     return { success: true };
   } catch (error) {
     if (error instanceof Error) {
