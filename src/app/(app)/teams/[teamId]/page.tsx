@@ -1,5 +1,8 @@
 import { notFound } from 'next/navigation';
 
+import { openai } from '@ai-sdk/openai';
+import { generateText } from 'ai';
+
 import { db, schema } from '@/db';
 import { MeasurementSelect, UserSelect } from '@/db/schema';
 
@@ -31,6 +34,7 @@ export default async function Page({
   });
 
   if (!team) return notFound();
+
   const members = (await db.query.users.findMany({
     where: (users, { inArray }) =>
       inArray(
@@ -109,10 +113,20 @@ export default async function Page({
       interpolated: !exact,
     });
   }
+  const prompt = `The team named ${team.name} has been loosing weight together since ${team.createdAt}. They started with ${data[0].weight} in ${data[0].date} and right now they are in ${data[data.length - 1].weight}. Write a congratulation message if they have loosed weight or a motivational message if not.`;
+
+  const { text: message } = await generateText({
+    model: openai('gpt-4o-mini'),
+    system:
+      'You are the WeightMates assistant, an app to loose weight with a team and compete with other teams.',
+    prompt,
+  });
 
   return (
     <div className="container mx-auto">
       <h1>{team.name} </h1>
+      <p className="my-4">{message}</p>
+
       <div className="grid grid-cols-1 gap-4">
         <Chart weightData={data} />
         <MembersTable members={members} />
