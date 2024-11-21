@@ -8,7 +8,7 @@ import { CounterStoreProvider } from './counter';
 export const StoreProviders = ({ children }: { children: ReactNode }) => {
   return (
     <AppStoreProvider>
-      <CounterStoreProvider>{children}</CounterStoreProvider>;
+      <CounterStoreProvider>{children}</CounterStoreProvider>
     </AppStoreProvider>
   );
 };

@@ -38,28 +38,28 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn(
-          serif.variable,
-          sans.variable,
-          mono.variable,
-          'antialiased',
-        )}
-      >
-        <StoreProviders>
-          <QueryProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="dark"
-              enableSystem
-              disableTransitionOnChange
+      <StoreProviders>
+        <QueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <body
+              className={cn(
+                serif.variable,
+                sans.variable,
+                mono.variable,
+                'bg-sidebar antialiased',
+              )}
             >
               {children}
-            </ThemeProvider>
-          </QueryProvider>
-        </StoreProviders>
-        <Analytics />
-      </body>
+            </body>
+          </ThemeProvider>
+        </QueryProvider>
+      </StoreProviders>
+      <Analytics />
     </html>
   );
 }
