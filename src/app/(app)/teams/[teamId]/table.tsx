@@ -166,7 +166,7 @@ export const MembersTable = ({
 }) => {
   return (
     <ClientWrapper>
-      <Table>
+      <Table className="text-xs sm:text-base">
         <TableHeader>
           <TableRow>
             <TableHead className="w-[300px]">Member</TableHead>

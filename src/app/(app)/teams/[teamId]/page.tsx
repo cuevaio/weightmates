@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 
 import { openai } from '@ai-sdk/openai';
 import { generateText } from 'ai';
+import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react';
 
 import { db, schema } from '@/db';
 import { MeasurementSelect, UserSelect } from '@/db/schema';
@@ -53,6 +54,18 @@ export default async function Page({
     measurements: MeasurementSelect[];
   })[];
 
+  const totalLoss = members.reduce((prev, member) => {
+    if (member.measurements.length > 1) {
+      return (
+        prev +
+        member.measurements[0].weight -
+        member.measurements[member.measurements.length - 1].weight
+      );
+    } else {
+      return prev;
+    }
+  }, 0);
+
   const dataPerMember = members.map((user) =>
     interpolateWeights(user.measurements),
   );
@@ -78,6 +91,13 @@ export default async function Page({
   const data: DailyWeight[] = [];
   const len =
     (new Date(today).getTime() - new Date(start).getTime()) / 1000 / 3600 / 24;
+
+  const totalWeeklyLoss = totalLoss / (len / 7);
+
+  const avgLoss =
+    totalLoss / members.filter((m) => m.measurements.length > 1).length;
+  const avgLossWeekly =
+    avgLoss / members.filter((m) => m.measurements.length > 1).length;
 
   for (let i = 0; i <= len; i++) {
     const date = new Date(new Date(start).getTime() + 24 * 3600 * 1000 * i)
@@ -124,13 +144,77 @@ export default async function Page({
 
   return (
     <div className="container mx-auto">
-      <h1>{team.name} </h1>
-      <p className="my-4">{message}</p>
+      <h1 className="text-xl font-bold">{team.name}</h1>
 
-      <div className="grid grid-cols-1 gap-4">
-        <Chart weightData={data} />
-        <MembersTable members={members} />
+      <div className="my-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:gap-0">
+        <div className="grid w-full grid-cols-2 gap-4 sm:grid-cols-4">
+          <div
+            className="data-[increasing=false]:text-green-500 data-[increasing=true]:text-red-500"
+            data-increasing={totalLoss > 0}
+          >
+            <span className="text-4xl font-bold tabular-nums">
+              {Math.abs(Math.round(totalLoss * 100) / 100).toFixed(2)}kg
+              {totalLoss > 0 ? (
+                <TrendingUpIcon className="inline-flex size-6" />
+              ) : (
+                <TrendingDownIcon className="inline-flex size-6" />
+              )}
+            </span>{' '}
+            total
+          </div>
+          <div
+            className="data-[increasing=false]:text-green-500 data-[increasing=true]:text-red-500"
+            data-increasing={totalWeeklyLoss > 0}
+          >
+            <span className="text-4xl font-bold tabular-nums">
+              {Math.abs(Math.round(totalWeeklyLoss * 100) / 100).toFixed(2)}kg
+              {totalWeeklyLoss > 0 ? (
+                <TrendingUpIcon className="inline-flex size-6" />
+              ) : (
+                <TrendingDownIcon className="inline-flex size-6" />
+              )}
+            </span>{' '}
+            total per week
+          </div>
+
+          <div
+            className="data-[increasing=false]:text-green-500 data-[increasing=true]:text-red-500"
+            data-increasing={avgLoss > 0}
+          >
+            <span className="text-4xl font-bold tabular-nums">
+              {Math.abs(Math.round(avgLoss * 100) / 100).toFixed(2)}kg
+              {avgLoss > 0 ? (
+                <TrendingUpIcon className="inline-flex size-6" />
+              ) : (
+                <TrendingDownIcon className="inline-flex size-6" />
+              )}
+            </span>{' '}
+            avg per member
+          </div>
+          <div
+            className="data-[increasing=false]:text-green-500 data-[increasing=true]:text-red-500"
+            data-increasing={avgLossWeekly > 0}
+          >
+            <span className="text-4xl font-bold tabular-nums">
+              {Math.abs(Math.round(avgLossWeekly * 100) / 100).toFixed(2)}kg
+              {avgLossWeekly > 0 ? (
+                <TrendingUpIcon className="inline-flex size-6" />
+              ) : (
+                <TrendingDownIcon className="inline-flex size-6" />
+              )}
+            </span>{' '}
+            avg per member - week
+          </div>
+        </div>
       </div>
+      <Chart weightData={data} />
+
+      <div className="my-8">
+        <p className="my-8 ml-8 border-l-4 pl-4">{message}</p>
+        <p className="text-right text-sm">- WeightMates AI</p>
+      </div>
+
+      <MembersTable members={members} />
     </div>
   );
 }

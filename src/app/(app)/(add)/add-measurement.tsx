@@ -57,11 +57,11 @@ export const AddMeasurement = () => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="" variant="outline">
-          Add Measurement
+          Weigh-in
         </Button>
       </DialogTrigger>
       <DialogContent className="w-[350px]">
-        <DialogHeader>Add Measurement</DialogHeader>
+        <DialogHeader>Weigh-in</DialogHeader>
         <DialogDescription>Track your progress</DialogDescription>
         <form action={mutate} className="space-y-4">
           <Input
