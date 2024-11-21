@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 import { StoreProviders } from '@/stores/providers';
+import { Analytics } from '@vercel/analytics/react';
 import { ThemeProvider } from 'next-themes';
 
 import { QueryProvider } from '@/components/query-provider';
@@ -57,6 +58,7 @@ export default function RootLayout({
             </ThemeProvider>
           </QueryProvider>
         </StoreProviders>
+        <Analytics />
       </body>
     </html>
   );
