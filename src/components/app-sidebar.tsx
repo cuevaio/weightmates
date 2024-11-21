@@ -33,6 +33,8 @@ import { NavSecondary } from '@/components/nav-secondary';
 import { NavTeam } from '@/components/nav-team';
 import { NavUser } from '@/components/nav-user';
 
+import { delay } from '@/lib/utils';
+
 export type NavbarItem = {
   name: string;
   url: string;
@@ -52,12 +54,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }, [error, router]);
 
   const { data: teams } = useTeams();
-  const { teamId } = useAppStore((s) => s);
+  const { teamId, setTeamId } = useAppStore((s) => s);
 
   const team = React.useMemo(
     () => teams?.find((t) => t.teamId === teamId),
     [teams, teamId],
   );
+
+  React.useEffect(() => {
+    delay(500).then(() => {
+      if (!teamId) {
+        if (teams?.length) {
+          setTeamId(teams[0].teamId);
+        }
+      }
+    });
+  }, [teams, teamId, setTeamId]);
+
   const [data, setData] = React.useState<{
     user: {
       id: string;
@@ -170,7 +183,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <span className="truncate font-semibold">
                     {team?.team.name}
                   </span>
-                  <span className="truncate text-xs">Enterprise</span>
+                  <span className="truncate text-xs">Team</span>
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -179,7 +192,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavTeam items={data.navTeam} />
+        {team && <NavTeam items={data.navTeam} />}
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

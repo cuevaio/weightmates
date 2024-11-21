@@ -19,3 +19,7 @@ export const dateFormatter = (value: string | Date) => {
     timeZone: 'Europe/London',
   });
 };
+
+export function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

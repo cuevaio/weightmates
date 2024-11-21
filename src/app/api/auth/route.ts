@@ -1,10 +1,15 @@
-import { getSession } from '@/auth';
+import { NextRequest } from 'next/server';
+
+import { nocache_getSession } from '@/auth/middleware';
 
 import { db } from '@/db';
 
-export const GET = async () => {
+export const runtime = 'edge';
+export const preferredRegion = 'iad1';
+
+export const GET = async (request: NextRequest) => {
   try {
-    const session = await getSession();
+    const session = await nocache_getSession(request);
 
     if (!session) {
       throw new Error('First login', {
