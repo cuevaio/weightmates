@@ -66,7 +66,7 @@ export async function addMember(formData: FormData): Promise<
       from: 'invites@updates.cueva.io',
       to: parsedEmail.data,
       subject: 'You have been invited to ' + team.name,
-      text: `${user.name} has invited you to his team ${team.name}. Join them in WeightMates to start loosing some weight togeter!`,
+      text: `${user.name} has invited you to his team ${team.name}. Join them in WeightMates to start loosing some weight togeter! Accept the invite in https://weightmates.vercel.app/invites`,
     });
 
     await db
