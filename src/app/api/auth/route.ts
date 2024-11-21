@@ -18,7 +18,7 @@ export const GET = async () => {
 
     if (!user) {
       throw new Error('Register first', {
-        cause: 500,
+        cause: 400,
       }); // user has to be created before going to (app)
     }
 

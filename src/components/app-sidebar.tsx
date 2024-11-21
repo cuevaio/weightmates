@@ -41,6 +41,16 @@ export type NavbarItem = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: user, error } = useAuth();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (error) {
+      if (error.message.includes('Register')) {
+        router.push('/register');
+      }
+    }
+  }, [error, router]);
+
   const { data: teams } = useTeams();
   const { teamId } = useAppStore((s) => s);
 
@@ -48,7 +58,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     () => teams?.find((t) => t.teamId === teamId),
     [teams, teamId],
   );
-  const router = useRouter();
   const [data, setData] = React.useState<{
     user: {
       id: string;
@@ -132,14 +141,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           url: n.url.startsWith('/users/') ? '/users/' + user.id : n.url,
         })),
       }));
-    } else {
-      if (error) {
-        if (error.message.includes('Register')) {
-          router.push('/register');
-        }
-      }
     }
-  }, [user, router, error]);
+  }, [user]);
 
   React.useEffect(() => {
     if (teamId) {
